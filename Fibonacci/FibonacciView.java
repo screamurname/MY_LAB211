@@ -21,29 +21,32 @@ class FibonacciView {
     }
 
     int inputNumberOfFibonacci() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            try {
-                System.out.println("Enter the number of Fibonacci: ");
-                String input = scanner.nextLine();
-                if (input.isEmpty()) {
-                    System.err.println("Input cannot be empty");
-                } else {
-                    int number = Integer.parseInt(input);
-                    //vượt quá giá trị mà kiểu Long có thể lưu trữ
-                    if (number >= 0 && number <= 92) {
-                        return number;
-                    }
-                    if (number >= 93) {
-                        System.out.println("The system can't display because the numbers too large. Please enter smaller numbers");
-                    }
+    Scanner scanner = new Scanner(System.in);
+    while (true) {
+        try {
+            System.out.println("Enter the number of Fibonacci: ");
+            String input = scanner.nextLine().trim(); // Dùng trim() để xóa khoảng trắng thừa
+            
+            if(input.isEmpty()) {
+                System.err.println("input cannot be empty");
+                continue; // Quay lại đầu vòng lặp
+            }
 
-                }
-
-            } catch (Exception e) {
-                System.err.println("input must be a positive number and not too large");
+            int number = Integer.parseInt(input); // Nếu là chữ, sẽ nhảy xuống catch ngay
+            
+            if (number >= 0 && number <= 92) {
+                 return number; // Chỉ thoát hàm khi dữ liệu hợp lệ
+            } else if (number >= 93) {
+                System.out.println("The system can't display because the numbers too large.");
+            } else {
+                System.err.println("Please enter a positive number.");
             }
         }
+        catch (NumberFormatException e) {
+            // Bắt đúng loại lỗi nhập chữ
+            System.err.println("Invalid input! Please enter a number, not text.");
+        }
     }
-
 }
+}
+
