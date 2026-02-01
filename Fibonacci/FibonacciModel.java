@@ -1,22 +1,21 @@
 package Fibonacci4;
 
 class FibonacciModel {
-    // Đây là hàm đệ quy đuôi (Tail Recursion)
+
+    // Hàm đệ quy đuôi: Tính đến đâu in đến đó, không cần quay ngược lại
     long FibonacciRecursive(long n, long lower, long higher) {
-        // 1. Lệnh in: Luôn in số hiện tại (higher) ra màn hình trước
-        System.out.print(higher + "  ");
+        // LUÔN in số 'higher' (số hiện tại) ra trước
+        System.out.print(higher + "  "); 
 
-        // 2. Điều kiện dừng (Base case của đệ quy): 
-        // Nếu số lượt cần in (n) nhỏ hơn 1, dừng lại và trả về giá trị cuối cùng
-        if (n < 1) {
-            return higher;
+        // ĐIỀU KIỆN DỪNG: Khi bộ đếm n giảm xuống dưới 1
+        if(n < 1) { 
+            return higher; // Thoát khỏi tầng đệ quy cuối cùng
         }
-
-        // 3. Bước đệ quy: Tự gọi lại chính nó với bộ thông số mới
-        // n-1: Giảm số lượt cần in
-        // lower mới = higher cũ
-        // higher mới = lower + higher (Tính số tiếp theo)
-        // position+1: Tăng vị trí đếm
-        return FibonacciRecursive(n - 1, higher, lower + higher);
+        
+        // GỌI ĐỆ QUY: 
+        // n-1: Đếm lùi số lần cần in
+        // higher: Số hiện tại trở thành số đứng trước (lower) cho lần sau
+        // lower + higher: Tổng mới trở thành số hiện tại (higher) cho lần sau
+        return FibonacciRecursive(n-1, higher, lower + higher);
     }
 }
