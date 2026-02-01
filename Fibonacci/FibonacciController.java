@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Fibonacci4;
 
-/**
- *
- * @author admin
- */
 class FibonacciController {
 
     private final FibonacciModel model;
@@ -19,28 +11,28 @@ class FibonacciController {
     }
 
     public void run() {
-        //Validate
+        // Bước 1: Gọi View để lấy số lượng người dùng muốn
         int maxNumber = view.inputNumberOfFibonacci();
-        //Display fibonacci number
+        
+        // Bước 2: In tiêu đề
         view.displayFibonacciSeries(maxNumber);
         
+        // Bước 3: Kiểm tra các trường hợp đặc biệt (Điều hướng)
         if (maxNumber == 0) {
-            return; // Không in gì cả
+            return; // Nếu nhập 0 thì kết thúc luôn, không làm gì cả
         } else if (maxNumber == 1) {
-            view.displayBaseCases(1);
+            view.displayBaseCases(1); // Gọi View in số "0"
         } else if (maxNumber == 2) {
-            view.displayBaseCases(2);
+            view.displayBaseCases(2); // Gọi View in "0  1"
         } else {
-            // In 2 số đầu tiên từ View
-            view.displayBaseCases(2);
-            System.out.print("  "); // Khoảng cách giữa base case và phần đệ quy
+            // Bước 4: Trường hợp > 2 số, kết hợp View và Model
+            view.displayBaseCases(2); // In trước "0  1" từ View
+            System.out.print("  "); 
 
-            // Gọi đệ quy để in từ số thứ 3 trở đi
-            // n: số lượng số còn lại cần in (maxNumber - 2)
-            // lower: số Fibonacci thứ 2 (là 1)
-            // higher: số Fibonacci thứ 3 (là 0 + 1 = 1)
+            // Kích hoạt đệ quy để in các số từ số thứ 3 trở đi
+            // maxNumber - 3: Vì đã in 2 số ở View và Model sẽ in thêm 1 số ở n=0
+            // lower=1, higher=1: Số thứ 2 (1) và số thứ 3 (1) của dãy
             model.FibonacciRecursive(maxNumber - 3, 1, 1);
         }
     }
-
 }
