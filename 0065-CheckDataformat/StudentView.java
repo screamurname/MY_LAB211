@@ -6,13 +6,37 @@ public class StudentView {
     private final Scanner in = new Scanner(System.in);
 
     public String inputName() {
-        while (true) {
-            System.out.print("Name: ");
-            String result = in.nextLine().trim();
-            if (result.matches("^[a-zA-Z\\s]+$")) return result;
-            System.err.println("Name must contain only letters.");
+    while (true) {
+        System.out.print("Name: ");
+        String result = in.nextLine().trim();
+        
+        // Kiểm tra định dạng: chỉ chứa chữ cái và khoảng trắng
+        if (result.matches("^[a-zA-Z\\s]+$")) {
+            return formatName(result); // Trả về tên đã được chuẩn hóa
+        }
+        System.err.println("Name must contain only letters.");
+    }
+}
+
+// Hàm phụ trợ để chuẩn hóa định dạng tên
+private String formatName(String name) {
+    // 1. Loại bỏ khoảng trắng thừa giữa các từ
+    name = name.replaceAll("\\s+", " ").toLowerCase();
+    
+    // 2. Chia chuỗi thành các từ
+    String[] words = name.split(" ");
+    StringBuilder sb = new StringBuilder();
+    
+    for (String word : words) {
+        if (!word.isEmpty()) {
+            // Viết hoa chữ cái đầu, viết thường các chữ còn lại
+            sb.append(Character.toUpperCase(word.charAt(0)))
+              .append(word.substring(1))
+              .append(" ");
         }
     }
+    return sb.toString().trim();
+}
 
     public String inputClassName() {
         while (true) {
