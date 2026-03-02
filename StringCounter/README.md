@@ -233,44 +233,103 @@ Hãy theo dõi một phiên làm việc điển hình:
 
 ---
 
-## **5. ĐÁNH GIÁ VÀ NHẬN XÉT**
+Đoạn code này nằm trong file `CounterModel.java` và có nhiệm vụ **đếm số lần xuất hiện của từng ký tự** trong chuỗi văn bản mà bạn nhập vào.
 
-### **Điểm mạnh:**
+Dưới đây là giải thích chi tiết từng dòng:
 
-1. **Tuân thủ MVC nghiêm ngặt** - Phân tách rõ ràng, mỗi lớp chỉ làm một nhiệm vụ
-2. **Khả năng tái sử dụng cao** - Có thể dễ dàng thay đổi View (ví dụ: chuyển sang giao diện đồ họa) mà không ảnh hưởng đến Model
-3. **Dễ kiểm thử** - Có thể test từng thành phần độc lập
-4. **Xử lý lỗi tốt** - View có validate dữ liệu đầu vào, không cho phép chuỗi rỗng
-5. **Mã nguồn sạch sẽ** - Dễ đọc, dễ bảo trì
+### 1. Vòng lặp `for (char ch : content.toCharArray())`
 
-### **Hạn chế:**
+* **`content.toCharArray()`**: Chuyển đổi chuỗi văn bản (`content`) thành một mảng các ký tự. Ví dụ: Nếu bạn nhập "Hello", nó sẽ biến thành `['H', 'e', 'l', 'l', 'o']`.
+* **`for (char ch : ...)`**: Đây là vòng lặp "for-each". Nó sẽ duyệt qua từng ký tự một trong mảng đó và gán vào biến `ch`.
 
-1. **HashMap không đảm bảo thứ tự** - Kết quả hiển thị có thể thay đổi thứ tự giữa các lần chạy
-2. **Không phân biệt chữ hoa/thường** - "Hello" và "hello" được tính là hai từ khác nhau
-3. **Không xử lý dấu câu** - "hello," và "hello" là hai từ khác nhau do dấu phẩy
-4. **Thiếu exception handling** - Không bắt các ngoại lệ có thể xảy ra
+### 2. Câu lệnh `if (Character.isSpaceChar(ch)) continue;`
 
-### **Gợi ý cải tiến:**
+* **`Character.isSpaceChar(ch)`**: Kiểm tra xem ký tự `ch` hiện tại có phải là khoảng trắng hay không.
+* **`continue`**: Nếu đúng là khoảng trắng, chương trình sẽ **bỏ qua** các dòng lệnh phía dưới và nhảy ngay sang ký tự tiếp theo.
+* **Mục đích**: Để chương trình chỉ đếm các chữ cái, con số, ký hiệu... mà không đếm các dấu cách.
 
-1. Sử dụng `TreeMap` thay `HashMap` nếu muốn kết quả được sắp xếp
-2. Thêm xử lý chuyển về chữ thường: `content.toLowerCase()`
-3. Loại bỏ dấu câu bằng regex: `content.replaceAll("[^a-zA-Z0-9\\s]", "")`
-4. Thêm try-catch để xử lý các trường hợp ngoại lệ
+### 3. Dòng xử lý chính: `charCounter.put(ch, charCounter.getOrDefault(ch, 0) + 1);`
 
----
+Dòng này thực hiện cập nhật số lượng ký tự vào bảng mã (`Map`):
 
-## **6. KẾT LUẬN**
+* **`charCounter.getOrDefault(ch, 0)`**:
+* Máy sẽ kiểm tra xem ký tự `ch` đã có trong danh sách đếm (`charCounter`) chưa.
+* Nếu **đã có**, nó lấy giá trị (số lần xuất hiện) hiện tại.
+* Nếu **chưa có**, nó trả về giá trị mặc định là `0`.
 
-Đây là một ứng dụng Java console được thiết kế tốt, minh họa thành công mô hình MVC và các khái niệm cơ bản trong lập trình hướng đối tượng. Nó thể hiện sự hiểu biết về:
 
-- **Cấu trúc dữ liệu** (Map, HashMap)
-- **Xử lý chuỗi** (StringTokenizer, char array)
-- **Tương tác người dùng** (Scanner)
-- **Tổ chức code theo mô hình** (MVC)
-
-Ứng dụng tuy đơn giản nhưng là nền tảng vững chắc để phát triển thành các ứng dụng phức tạp hơn như xử lý văn bản, phân tích nội dung, hay các hệ thống có giao diện đồ họa.
+* **`+ 1`**: Tăng số lượng đếm được thêm 1 đơn vị.
+* **`charCounter.put(ch, ...)`**: Lưu (hoặc cập nhật) ký tự `ch` cùng với số lượng mới vào Map.
 
 ---
 
-*Báo cáo phân tích kỹ thuật - Dành cho người mới bắt đầu*
-*Ngày phân tích: 22/02/2026*
+### Ví dụ minh họa
+
+Giả sử bạn nhập chữ: **"AA B"**
+
+1. **Ký tự 'A' đầu tiên**: Chưa có trong Map -> Lấy 0 + 1 = 1. Map: `{A=1}`.
+2. **Ký tự 'A' thứ hai**: Đã có 'A' (là 1) -> Lấy 1 + 1 = 2. Map: `{A=2}`.
+3. **Ký tự khoảng trắng**: Gặp lệnh `continue` -> Bỏ qua.
+4. **Ký tự 'B'**: Chưa có trong Map -> Lấy 0 + 1 = 1. Map: `{A=2, B=1}`.
+
+**Kết quả cuối cùng:** Bạn sẽ có một bảng thống kê chi tiết mỗi ký tự xuất hiện bao nhiêu lần.
+
+Được, giải thích theo cách **người trưởng thành, logic, đời thường**, không ví von trẻ con.
+
+**Array (mảng)** là một vùng bộ nhớ liên tiếp, mỗi phần tử nằm ở **vị trí cố định** và được truy cập bằng **chỉ số**. Vì vị trí đã xác định sẵn nên truy xuất rất nhanh, nhưng nhược điểm là **kích thước không thay đổi được** và khi cần tìm một phần tử theo **giá trị** (không biết chỉ số) thì buộc phải **duyệt tuần tự** toàn bộ mảng.
+
+**List** (phổ biến nhất là ArrayList) là phiên bản **linh hoạt hơn của Array**. Nó vẫn lưu dữ liệu theo thứ tự, nhưng cho phép **tăng giảm kích thước**. Việc truy xuất theo chỉ số vẫn nhanh, tuy nhiên việc **tìm kiếm theo giá trị** hay **xóa/chèn ở giữa** vẫn tốn thời gian vì phải dịch chuyển các phần tử còn lại.
+
+**HashMap** là cấu trúc lưu dữ liệu theo **cặp khóa–giá trị (key–value)**. Thay vì truy cập bằng vị trí, nó truy cập bằng **khóa**. Khi đưa một khóa vào, HashMap sử dụng **hàm băm** để tính ra vị trí lưu trữ trong bộ nhớ, nhờ đó việc thêm và lấy dữ liệu diễn ra **gần như tức thời**, không phụ thuộc vào số lượng phần tử. Đổi lại, HashMap **không đảm bảo thứ tự**, tốn bộ nhớ hơn và yêu cầu khóa phải được thiết kế đúng (`hashCode` và `equals`).
+
+**Tóm lại**:
+
+* Dùng **Array** khi kích thước cố định và truy cập bằng vị trí.
+* Dùng **List** khi cần thứ tự và khả năng thêm bớt phần tử.
+* Dùng **HashMap** khi cần tra cứu nhanh theo khóa và không quan tâm đến thứ tự.
+Đoạn mã này nằm trong phương thức `analyze` của lớp `CounterModel`, có nhiệm vụ **tách chuỗi văn bản thành các từ riêng biệt và đếm số lần xuất hiện của mỗi từ**.
+
+Dưới đây là giải thích chi tiết từng thành phần:
+
+### 1. Khởi tạo StringTokenizer
+
+`StringTokenizer tokenizer = new StringTokenizer(content);`
+
+* **`StringTokenizer`**: Đây là một lớp tiện ích trong Java dùng để chia một chuỗi lớn thành các phần nhỏ hơn (gọi là các **tokens**).
+* **Cơ chế mặc định**: Theo mặc định, nó sẽ coi các khoảng trắng (dấu cách, tab, xuống dòng) là ký tự phân cách để tách từ.
+
+### 2. Vòng lặp `while (tokenizer.hasMoreTokens())`
+
+* **`hasMoreTokens()`**: Phương thức này kiểm tra xem trong chuỗi còn từ nào chưa được lấy ra hay không.
+* Vòng lặp sẽ tiếp tục chạy cho đến khi toàn bộ văn bản đã được tách hết thành các từ.
+
+### 3. Lấy từ tiếp theo
+
+`String token = tokenizer.nextToken();`
+
+* **`nextToken()`**: Lấy từ (token) hiện tại ra khỏi hàng đợi và gán vào biến `token` kiểu String.
+* Ví dụ: Nếu chuỗi là "Học Java", lần đầu nó lấy "Học", lần sau nó lấy "Java".
+
+### 4. Đếm và lưu vào Map
+
+`wordCounter.put(token, wordCounter.getOrDefault(token, 0) + 1);`
+Dòng này hoạt động tương tự như phần đếm ký tự mà bạn đã hỏi, nhưng áp dụng cho từ:
+
+* **`wordCounter`**: Là một `HashMap` lưu trữ theo cặp `Key` (Từ) và `Value` (Số lần xuất hiện).
+* **`getOrDefault(token, 0)`**: Kiểm tra xem từ này đã có trong danh sách đếm chưa. Nếu có rồi thì lấy số lượng hiện tại, nếu chưa có thì bắt đầu từ `0`.
+* **`+ 1`**: Tăng biến đếm lên 1 đơn vị.
+* **`put(...)`**: Cập nhật lại giá trị mới vào Map.
+
+---
+
+### Ví dụ luồng chạy
+
+Nếu nội dung nhập vào là: `"apple banana apple"`
+
+1. **Lần 1**: `nextToken()` lấy được `"apple"`. `wordCounter` chưa có "apple", nên nó lưu: `{apple: 1}`.
+2. **Lần 2**: `nextToken()` lấy được `"banana"`. `wordCounter` chưa có "banana", nên nó lưu thêm: `{apple: 1, banana: 1}`.
+3. **Lần 3**: `nextToken()` lấy được `"apple"`. `wordCounter` **đã có** "apple" với giá trị là 1, nó cộng thêm 1: `{apple: 2, banana: 1}`.
+
+Cuối cùng, phương thức `displayResult` trong `CounterView` sẽ in kết quả này ra màn hình cho người dùng thấy.
+
+Bạn có muốn mình hướng dẫn cách thay thế `StringTokenizer` bằng phương thức `split()` hiện đại hơn không?
